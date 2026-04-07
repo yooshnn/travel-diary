@@ -16,7 +16,8 @@ CREATE TABLE `sido` (
     `code`       INT         NOT NULL,
     `created_at` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_sido_code` (`code`)
 );
 
 CREATE TABLE `gugun` (
@@ -27,6 +28,7 @@ CREATE TABLE `gugun` (
     `created_at` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_gugun_sido_code` (`sido_id`, `code`),
     FOREIGN KEY (`sido_id`) REFERENCES `sido` (`id`)
 );
 
