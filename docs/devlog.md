@@ -116,7 +116,7 @@ int bookmarkCount = bookmarkService.getBookmarkCount(attractionId);
 
 둘째, 다른 것과 분리해서 설명할 수 있는가. "북마크 기능을 설명해봐", "지역 목록 조회 기능을 설명해봐"처럼 독립적인 기능으로 설명할 수 있으면 도메인이다.
 
-`ai`는 `ai_report`, `diary_emotion_analysis`, `attraction_emotion_stat` 같은 AI 전용 테이블이 있고 Scheduler 로직이 복잡하므로 별도 패키지로 격리해두는 게 관리하기 편하다.
+이 기준으로 지금 패키지를 보면 `member / attraction / diary / bookmark / region`은 문제없다. `ai`는 `ai_report`, `diary_emotion_analysis`, `attraction_emotion_stat` 같은 AI 전용 테이블이 있고 Scheduler 로직이 복잡하므로 별도 패키지로 격리해두는 게 관리하기 편하다.
 
 ### 도메인 패키지와 RESTful API path의 관계
 
@@ -155,3 +155,50 @@ public Long getSidoIdByCode(int sidoCode) {
 `POST /api/v1/attraction/search` 응답이 `SliceResponse`인데 기존 코드는 `countSearchList(command)`를 매번 별도 쿼리로 날리고 있었다. 커서 페이징의 장점인 `COUNT(*)` 회피가 사실상 없는 상태였다.
 
 재구현에서는 `totalCount`를 `SliceResponse`에서 제거하고 `hasNext`만 제공하는 순수 커서 페이징으로 간다. 지도 기반 검색 UI에서 "총 몇 개" 숫자보다 "더 있음/없음"이 더 자연스럽고, 클라이언트가 totalCount를 매 요청에 포함시켜야 하는 부담도 없어진다.
+
+---
+
+## 6. 코드 설계 결정
+
+### ApiResponse — 정적 팩토리 메서드 패턴
+
+`ApiResponse`는 class로 구현하고 생성자를 `@AllArgsConstructor(access = AccessLevel.PRIVATE)`로 숨겼다. `onSuccess`, `onFailure`로만 인스턴스를 만들게 강제해서 `new ApiResponse<>(false, data, null)` 같은 잘못된 조합을 사전에 방지한다.
+
+### PageResponse — record 사용 이유
+
+`PageResponse`는 record로 구현했다. `ApiResponse`와 달리 생성자를 숨길 필요가 없기 때문이다. `of()`는 파생값 계산의 편의를 위한 것이지 잘못된 조합을 방지하는 목적이 아니다. record는 불변 데이터 클래스에 적합하고 생성자/equals/hashCode/toString을 자동으로 생성해 보일러플레이트를 줄인다.
+
+### 정적 팩토리 메서드 네이밍 — of vs from
+
+`of`는 같은 타입이거나 동등한 수준의 값들을 조합해서 인스턴스를 만들 때 쓴다. `from`은 다른 타입에서 변환할 때 쓴다.
+
+`PageResponse.of()`는 `content`, `currentPage`, `size`, `totalElements`를 받아 `PageResponse`를 만드는 값 조합이므로 `of`가 맞다. 반면 엔티티 → DTO 변환처럼 `AttractionResponse.from(attraction)` 형태는 타입 변환이므로 `from`이 맞다.
+
+### 기본 타입 vs 래퍼 타입 (primitive vs wrapper)
+
+기본 타입(`boolean`, `int`, `long` 등)은 null이 될 수 없고, 래퍼 타입(`Boolean`, `Integer`, `Long` 등)은 null이 될 수 있다. FE/클라이언트 관점에서 기본 타입 → 해당 타입, 래퍼 타입 → `해당 타입 | null`로 대응된다.
+
+응답 클래스(`ApiResponse`, `PageResponse`, `SliceResponse`)의 `success`, `hasPrev`, `hasNext`, `currentPage` 등은 반드시 값이 존재해야 하므로 기본 타입으로 통일한다. 래퍼 타입을 쓰면 의도치 않게 "이 필드는 null일 수 있다"는 시그널을 주게 되고 `NullPointerException` 가능성도 생긴다.
+
+엔티티에서는 DB 컬럼 nullable 여부에 따라 결정한다. `NOT NULL` 컬럼이면 기본 타입, nullable 컬럼이면 래퍼 타입을 쓴다.
+
+### SliceResponse를 flat하게 구조 변경
+
+초기 구현에서 `SliceResponse`는 `content`와 `SliceMeta`로 나뉜 중첩 구조였다.
+
+```json
+{
+  "content": [...],
+  "meta": { "hasNext": true, "cursor": { ... } }
+}
+```
+
+`PageResponse`가 flat한데 `SliceResponse`만 중첩 구조면 클라이언트 입장에서 두 응답 포맷이 다르게 생겨 일관성이 떨어진다. `meta`로 감싸는 이점도 크지 않아서 `SliceMeta`를 제거하고 `hasNext`, `cursor`를 최상위 필드로 올렸다.
+
+```json
+{
+  "content": [...],
+  "hasNext": true,
+  "cursor": { ... }
+}
+```
