@@ -25,7 +25,6 @@ record PageResponse<T>(
 record SliceResponse<T, C>(
     List<T> content,
     boolean hasNext,
-    int totalCount,
     C cursor
 )
 ```
@@ -35,6 +34,73 @@ record SliceResponse<T, C>(
 - 401: 토큰 없음 또는 유효하지 않음
 - 403: 권한 없음
 - 404: 리소스 없음
+
+---
+
+## 마스터 데이터
+
+> 인증 불필요
+
+### GET /api/v1/region/sido
+시도 목록을 조회한다.
+
+```java
+// Response 200
+List<SidoResponse>
+
+record SidoResponse(
+    Long id,
+    String name,
+    int code
+)
+```
+
+---
+
+### GET /api/v1/region/sido/{sidoId}/gugun
+시도에 속한 구군 목록을 조회한다.
+
+```java
+// Response 200
+List<GugunResponse>
+
+record GugunResponse(
+    Long id,
+    String name,
+    int code
+)
+// Response 404: 존재하지 않는 시도
+```
+
+---
+
+### GET /api/v1/content-type
+컨텐츠 타입 목록을 조회한다.
+
+```java
+// Response 200
+List<ContentTypeResponse>
+
+record ContentTypeResponse(
+    Long id,
+    String name
+)
+```
+
+---
+
+### GET /api/v1/emotion-type
+감정 타입 목록을 조회한다.
+
+```java
+// Response 200
+List<EmotionTypeResponse>
+
+record EmotionTypeResponse(
+    Long id,
+    String name
+)
+```
 
 ---
 

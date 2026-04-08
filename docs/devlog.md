@@ -108,6 +108,22 @@ int bookmarkCount = bookmarkService.getBookmarkCount(attractionId);
 
 **대안 2를 선택한 이유**: 지금 규모에서 Facade는 오버엔지니어링이다. 핵심 문제인 "비즈니스 흐름이 Controller에 노출된 것"을 해결하는 최소한의 방법은 해당 로직을 Service로 내리는 것이다.
 
+### 도메인 선정 기준
+
+도메인을 나누는 핵심 질문은 "이게 독립적인 비즈니스 관심사인가"다. 독립적이라는 건 두 가지로 판단한다.
+
+첫째, 자체 상태를 가지는가. 자기만의 테이블이 있고 생명주기(생성/수정/삭제)가 있으면 도메인이다.
+
+둘째, 다른 것과 분리해서 설명할 수 있는가. "북마크 기능을 설명해봐", "지역 목록 조회 기능을 설명해봐"처럼 독립적인 기능으로 설명할 수 있으면 도메인이다.
+
+`ai`는 `ai_report`, `diary_emotion_analysis`, `attraction_emotion_stat` 같은 AI 전용 테이블이 있고 Scheduler 로직이 복잡하므로 별도 패키지로 격리해두는 게 관리하기 편하다.
+
+### 도메인 패키지와 RESTful API path의 관계
+
+path는 클라이언트가 리소스를 어떻게 인식하느냐의 문제고, 도메인은 서버 내부에서 책임을 어떻게 나누느냐의 문제다. 둘은 참고는 하되 종속되지 않는다.
+
+예를 들어 `GET /api/v1/attraction/{attractionId}/report`는 path가 `attraction` 하위에 있지만 실제로는 `ai` 도메인이 처리한다. "이 리포트는 attraction에 속한 리소스다"라는 클라이언트 관점의 설계와 서버 내부의 책임 분리가 다른 경우다. 반대로 bookmark는 `attraction`의 하위 리소스로 볼 수도 있어서 `POST /api/v1/attraction/{attractionId}/bookmark`도 RESTful하게 맞는 설계지만, 북마크 기능이 독립적으로 충분히 크다고 판단해 별도 path로 분리했다.
+
 ### 추가 개선 — RegionRepository 직접 참조
 
 `RegionService`를 보면 비즈니스 로직 없이 Repository를 그대로 위임만 하고 있다.
@@ -134,8 +150,8 @@ public Long getSidoIdByCode(int sidoCode) {
 
 `GET /api/v1/diary/attraction/{attractionId}`에 `diaryId` 쿼리 파라미터가 있었다. 여행지 상세 페이지에서 특정 일기 카드를 클릭하면 그 일기가 목록 첫 번째로 보이게 하기 위한 파라미터였는데, FE에서 미구현 상태로 남아있었다. 용도가 불명확한 이름이라 `targetDiaryId`로 변경했다.
 
-### 커서 페이징에서 totalCount를 매번 계산하는 문제
+### 커서 페이징에서 totalCount 제거
 
-`POST /api/v1/attraction/search` 응답이 `SliceResponse`인데 `totalCount`가 포함되어 있다. 기존 코드를 보면 `countSearchList(command)`를 매번 별도 쿼리로 날리고 있어서, 커서 페이징의 장점인 `COUNT(*)` 회피가 사실상 없는 상태다.
+`POST /api/v1/attraction/search` 응답이 `SliceResponse`인데 기존 코드는 `countSearchList(command)`를 매번 별도 쿼리로 날리고 있었다. 커서 페이징의 장점인 `COUNT(*)` 회피가 사실상 없는 상태였다.
 
-대안으로는 두 가지를 고려하고 있다. 첫 번째는 첫 요청에만 totalCount를 계산하고 이후 페이지 요청에는 클라이언트가 캐싱하는 방식이다. 두 번째는 totalCount를 아예 제거하고 `hasNext`만 제공하는 순수 커서 페이징으로 가는 방식이다.
+재구현에서는 `totalCount`를 `SliceResponse`에서 제거하고 `hasNext`만 제공하는 순수 커서 페이징으로 간다. 지도 기반 검색 UI에서 "총 몇 개" 숫자보다 "더 있음/없음"이 더 자연스럽고, 클라이언트가 totalCount를 매 요청에 포함시켜야 하는 부담도 없어진다.
