@@ -4,6 +4,15 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/*
+ * # 정적 팩토리 메서드 패턴
+ * 생성자를 private으로 막고 onSuccess, onFailure로만 인스턴스를 만들게 강제한다.
+ * new ApiResponse<>(false, data, null) 같은 잘못된 조합을 사전에 방지한다.
+ *
+ * # class 사용 이유
+ * 생성자를 숨기려면 @AllArgsConstructor(access = AccessLevel.PRIVATE)가 필요하다.
+ * record는 생성자를 private으로 만들 수 없으므로 class를 사용했다.
+ */
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiResponse<T> {

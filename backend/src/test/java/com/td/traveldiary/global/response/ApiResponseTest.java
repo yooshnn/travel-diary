@@ -2,14 +2,34 @@ package com.td.traveldiary.global.response;
 
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class ApiResponseTest {
 
     @Test
-    void onSuccess는_success가_true이고_data가_담긴다() {}
+    void onSuccess_success_is_true_and_data_is_set() {
+        String data = "my-data";
+        ApiResponse<String> response = ApiResponse.onSuccess(data);
+
+        assertThat(response.isSuccess()).isTrue();
+        assertThat(response.getData()).isEqualTo(data);
+        assertThat(response.getMessage()).isNull();
+    }
 
     @Test
-    void onSuccess에_null을_넘기면_data가_null이다() {}
+    void onSuccess_allows_null_data() {
+        ApiResponse<Void> response = ApiResponse.onSuccess(null);
+
+        assertThat(response.isSuccess()).isTrue();
+        assertThat(response.getData()).isNull();
+    }
 
     @Test
-    void onFailure는_success가_false이고_message가_담긴다() {}
+    void onFailure_success_is_false_and_message_is_set() {
+        ApiResponse<Void> response = ApiResponse.onFailure("error message");
+
+        assertThat(response.isSuccess()).isFalse();
+        assertThat(response.getMessage()).isEqualTo("error message");
+        assertThat(response.getData()).isNull();
+    }
 }
