@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class Sido extends BaseEntity {
-    private Long id;
+    private long id;
     private String name;
     private int code;
 }
