@@ -1,5 +1,6 @@
 package com.td.traveldiary.global.response;
 
+import com.td.traveldiary.global.exception.ErrorCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,5 +27,8 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> onFailure(String message) {
         return new ApiResponse<>(false, null, message);
+    }
+    public static <T> ApiResponse<T> onFailure(ErrorCode errorCode) {
+        return new ApiResponse<>(false, null, errorCode.getMessage());
     }
 }
