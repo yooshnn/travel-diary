@@ -1,4 +1,4 @@
-package com.td.traveldiary.domain.region.dto.response;
+package com.td.traveldiary.domain.region.dto;
 
 import com.td.traveldiary.domain.region.entity.Gugun;
 
