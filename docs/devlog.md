@@ -140,7 +140,33 @@ public Long getSidoIdByCode(int sidoCode) {
 
 ---
 
-## 5. API 명세서
+## 5. 테스트 전략
+
+### 레이어별 테스트 어노테이션 선택 이유
+
+레이어마다 다른 어노테이션을 쓰는 이유는 "테스트에 필요한 것만 올려서 빠르게"라는 원칙 때문이다.
+
+**Service — `@ExtendWith(MockitoExtension.class)`**
+
+Service는 순수 Java 객체다. Spring 컨텍스트가 전혀 필요 없고, Mockito만으로 의존성을 Mock 처리하고 메서드를 직접 호출하면 된다. 가장 빠르고 가볍다.
+
+**Controller — `@WebMvcTest`**
+
+Controller는 HTTP 요청/응답, 직렬화, 필터, Security 같은 웹 레이어 관심사를 테스트해야 한다. Spring MVC 컨텍스트만 슬라이스해서 올리고 Service는 `@MockitoBean`으로 대체한다. `@SpringBootTest`보다 훨씬 가볍다.
+
+**Repository — `@MybatisTest` + `@AutoConfigureTestDatabase(replace = NONE)`**
+
+Repository는 실제 DB와 통신해야 한다. `@MybatisTest`는 MyBatis 관련 Bean(`@Mapper`, XML 매퍼, MyBatis 설정)만 슬라이스해서 올리고 나머지는 무시한다. 기본적으로 인메모리 DB(H2)를 띄우려 하는데, 스키마에 `POINT`, `SPATIAL INDEX` 같은 MySQL 전용 문법이 있어서 H2가 파싱에 실패한다. `@AutoConfigureTestDatabase(replace = NONE)`으로 자동 교체를 막고 `application-local.properties`의 MySQL을 그대로 사용한다.
+
+### Repository 테스트의 기술 종속성
+
+`@MybatisTest`를 쓰면 MyBatis에 종속적인 테스트가 된다. 이는 불가피하고 자연스럽다. Repository 테스트의 목적 자체가 "SQL이 의도대로 동작하는가"를 검증하는 것이기 때문이다. MyBatis → JPA로 마이그레이션하면 `@MybatisTest` → `@DataJpaTest`로 바꿔야 하는데, 이는 문제가 아니라 "Repository 테스트는 구현 기술에 맞게 바뀐다"고 받아들이는 것이 맞다.
+
+기술 종속성을 없애는 방법은 Repository를 인터페이스로 추상화하고 Service 테스트에서 그 인터페이스를 Mock하는 것이다. 이미 Service 테스트에서 `@Mock`으로 Repository를 처리하고 있어서 Service 레이어는 MyBatis를 모른다.
+
+---
+
+## 6. API 명세서
 
 ### 명세 작성 과정에서 발견한 누락
 
@@ -158,7 +184,7 @@ public Long getSidoIdByCode(int sidoCode) {
 
 ---
 
-## 6. 코드 설계 결정
+## 7. 코드 설계 결정
 
 ### ApiResponse — 정적 팩토리 메서드 패턴
 
