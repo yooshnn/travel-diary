@@ -29,12 +29,12 @@ class ContentTypeControllerTest {
     @Test
     void getContentTypes_returns_200() throws Exception {
         when(contentTypeService.getContentTypes()).thenReturn(List.of(
-                new ContentTypeResponse(1L, "여유로운")
+                new ContentTypeResponse(12L, "관광지")
         ));
 
         mockMvc.perform(get("/api/v1/content-type"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].name").value("여유로운"));
+                .andExpect(jsonPath("$.data[0].name").value("관광지"));
     }
 
 }

@@ -25,13 +25,13 @@ class ContentTypeServiceTest {
 
     @Test
     void getContentTypes_returns_contentType_list() {
-        ContentType contentType = new ContentType(1L, "여유로운");
+        ContentType contentType = new ContentType(12L, "관광지");
         when(contentTypeRepository.findAll()).thenReturn(List.of(contentType));
 
         List<ContentTypeResponse> result = contentTypeService.getContentTypes();
 
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).name()).isEqualTo("여유로운");
+        assertThat(result.get(0).name()).isEqualTo("관광지");
     }
 
 }
