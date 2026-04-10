@@ -150,8 +150,8 @@ record MemberInfoResponse(
 ```java
 // Request
 record AttractionCreateRequest(
-    int sidoCode,
-    int gugunCode,
+    Long sidoId,
+    Long gugunId,
     Long contentTypeId,
     String name,
     MultipartFile photo,    // 선택
