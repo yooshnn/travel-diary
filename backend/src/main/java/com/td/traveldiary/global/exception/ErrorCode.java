@@ -25,7 +25,9 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "서버 내부 오류가 발생했습니다."),
 
     SIDO_NOT_FOUND(404, "존재하지 않는 시도입니다."),
-    INVALID_TOKEN(401, "유효하지 않은 토큰입니다.");
+
+    INVALID_TOKEN(401, "유효하지 않은 토큰입니다."),
+    UNSUPPORTED_PROVIDER(500, "지원하지 않는 OAuth2 제공자입니다.");
 
     private final int httpStatus;
     private final String message;
