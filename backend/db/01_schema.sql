@@ -42,14 +42,15 @@ CREATE TABLE `emotion_type` (
 
 -- 5. 멤버
 CREATE TABLE `member` (
-    `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT '멤버 ID',
-    `name`        VARCHAR(255) NOT NULL COMMENT '이름',
-    `provider_id` VARCHAR(100) NOT NULL COMMENT '소셜로그인 ID',
-    `provider`    VARCHAR(20)  NOT NULL COMMENT '소셜로그인 종류',
-    `role`        ENUM('USER', 'ADMIN') NOT NULL DEFAULT 'USER' COMMENT '역할',
-    `is_deleted`  TINYINT      NOT NULL DEFAULT 0 COMMENT '삭제여부',
-    `created_at`  DATETIME     DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
-    `updated_at`  DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일시',
+    `id`                BIGINT       NOT NULL AUTO_INCREMENT COMMENT '멤버 ID',
+    `name`              VARCHAR(255) NOT NULL COMMENT '이름',
+    `provider_id`       VARCHAR(100) NOT NULL COMMENT '소셜로그인 ID',
+    `provider`          VARCHAR(20)  NOT NULL COMMENT '소셜로그인 종류',
+    `role`              ENUM('USER', 'ADMIN') NOT NULL DEFAULT 'USER' COMMENT '역할',
+    `profile_image_url` VARCHAR(255) NULL COMMENT '프로필 이미지 URL',
+    `is_deleted`        TINYINT      NOT NULL DEFAULT 0 COMMENT '삭제여부',
+    `created_at`        DATETIME     DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
+    `updated_at`        DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일시',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='멤버';
 

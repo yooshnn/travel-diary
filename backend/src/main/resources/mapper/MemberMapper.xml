@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.td.traveldiary.domain.member.repository.MemberRepository">
+
+    <select id="findByProviderId" resultType="com.td.traveldiary.domain.member.entity.Member">
+        SELECT *
+        FROM member
+        WHERE provider_id = #{providerId} AND is_deleted = 0
+    </select>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO member (name, provider_id, provider, role, profile_image_url, is_deleted)
+        VALUES (#{name}, #{providerId}, #{provider}, #{role}, #{profileImageUrl}, 0)
+    </insert>
+
+    <update id="update">
+        UPDATE member
+        SET name = #{name}, profile_image_url = #{profileImageUrl}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findById" resultType="com.td.traveldiary.domain.member.entity.Member">
+        SELECT *
+        FROM member
+        WHERE id = #{id} AND is_deleted = 0
+    </select>
+
+</mapper>

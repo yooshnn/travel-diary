@@ -2,6 +2,7 @@ package com.td.traveldiary.global.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 /*
  * # enum
@@ -23,7 +24,10 @@ public enum ErrorCode {
     INVALID_INPUT_VALUE(400, "입력값이 올바르지 않습니다."),
     INTERNAL_SERVER_ERROR(500, "서버 내부 오류가 발생했습니다."),
 
-    SIDO_NOT_FOUND(404, "존재하지 않는 시도입니다.");
+    SIDO_NOT_FOUND(404, "존재하지 않는 시도입니다."),
+
+    INVALID_TOKEN(401, "유효하지 않은 토큰입니다."),
+    UNSUPPORTED_PROVIDER(500, "지원하지 않는 OAuth2 제공자입니다.");
 
     private final int httpStatus;
     private final String message;
