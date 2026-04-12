@@ -5,8 +5,14 @@ spring.datasource.password=
 app.frontend.url=
 app.oauth2.callback-path=
 
+app.cors.allowed-origins=
+security.whitelist=
+
 spring.security.oauth2.client.registration.google.client-id=
 spring.security.oauth2.client.registration.google.client-secret=
 spring.security.oauth2.client.registration.google.scope=
 jwt.secret=
 jwt.expiration=
+
+storage.local.path=
+storage.local.base-url=
