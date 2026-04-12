@@ -1,11 +1,13 @@
 package com.td.traveldiary.domain.member.controller;
 
+import com.td.traveldiary.domain.member.controller.dto.request.MemberUpdateRequest;
 import com.td.traveldiary.domain.member.controller.dto.response.MemberInfoResponse;
 import com.td.traveldiary.domain.member.service.MemberService;
 import com.td.traveldiary.domain.member.service.dto.response.MemberInfo;
 import com.td.traveldiary.global.annotation.CurrentMemberId;
 import com.td.traveldiary.global.annotation.ValidImageFile;
 import com.td.traveldiary.global.response.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,13 +32,12 @@ public class MemberController {
     @PatchMapping("/me")
     public ApiResponse<MemberInfoResponse> updateMyProfile(
             @CurrentMemberId Long memberId,
-            @RequestParam String name,
-            @RequestParam(required = false) @ValidImageFile MultipartFile profileImage) {
+            @Valid @ModelAttribute MemberUpdateRequest request) {
 
-        MultipartFile validatedImage = (profileImage != null && !profileImage.isEmpty())
-                ? profileImage : null;
+        MultipartFile validatedImage = (request.profileImage() != null && !request.profileImage().isEmpty())
+                ? request.profileImage() : null;
 
-        MemberInfo memberInfo = memberService.updateMyProfile(memberId, name, validatedImage);
+        MemberInfo memberInfo = memberService.updateMyProfile(memberId, request.name(), validatedImage);
         MemberInfoResponse response = MemberInfoResponse.from(memberInfo);
 
         return ApiResponse.onSuccess(response);
