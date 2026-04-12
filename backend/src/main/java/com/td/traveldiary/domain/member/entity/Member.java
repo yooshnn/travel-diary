@@ -28,8 +28,12 @@ public class Member extends BaseEntity {
         this.isDeleted = isDeleted;
     }
 
-    public void updateProfile(String newName) {
+    public void updateName(String newName) {
         Assert.hasText(newName, "이름은 비어있을 수 없습니다.");
         this.name = newName;
+    }
+
+    public void updateProfileImageUrl(String newProfileImageUrl) {
+        this.profileImageUrl = newProfileImageUrl;
     }
 }

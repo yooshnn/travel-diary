@@ -26,8 +26,13 @@ public enum ErrorCode {
 
     SIDO_NOT_FOUND(404, "존재하지 않는 시도입니다."),
 
+    FILE_UPLOAD_FAIL(500, "파일 업로드에 실패했습니다."),
+
+    UNAUTHORIZED(401, "인증 정보가 없습니다."),
     INVALID_TOKEN(401, "유효하지 않은 토큰입니다."),
-    UNSUPPORTED_PROVIDER(500, "지원하지 않는 OAuth2 제공자입니다.");
+    UNSUPPORTED_PROVIDER(500, "지원하지 않는 OAuth2 제공자입니다."),
+
+    MEMBER_NOT_FOUND(404, "회원을 찾을 수 없습니다.");
 
     private final int httpStatus;
     private final String message;
