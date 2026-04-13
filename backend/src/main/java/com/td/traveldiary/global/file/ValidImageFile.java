@@ -1,6 +1,5 @@
-package com.td.traveldiary.global.annotation;
+package com.td.traveldiary.global.file;
 
-import com.td.traveldiary.global.validator.ImageFileValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

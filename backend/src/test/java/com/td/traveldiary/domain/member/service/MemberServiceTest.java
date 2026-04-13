@@ -6,7 +6,7 @@ import com.td.traveldiary.domain.member.entity.Role;
 import com.td.traveldiary.domain.member.exception.MemberNotFoundException;
 import com.td.traveldiary.domain.member.repository.MemberRepository;
 import com.td.traveldiary.domain.member.service.dto.response.MemberInfo;
-import com.td.traveldiary.global.storage.FileStorageService;
+import com.td.traveldiary.global.file.FileStorageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

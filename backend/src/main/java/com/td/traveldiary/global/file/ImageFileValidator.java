@@ -1,6 +1,5 @@
-package com.td.traveldiary.global.validator;
+package com.td.traveldiary.global.file;
 
-import com.td.traveldiary.global.annotation.ValidImageFile;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.web.multipart.MultipartFile;

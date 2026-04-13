@@ -1,4 +1,4 @@
-package com.td.traveldiary.global.storage;
+package com.td.traveldiary.global.file;
 
 import org.springframework.web.multipart.MultipartFile;
 

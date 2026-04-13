@@ -1,4 +1,4 @@
-package com.td.traveldiary.global.resolver;
+package com.td.traveldiary.global.principal;
 
 import com.td.traveldiary.global.exception.BusinessException;
 import org.junit.jupiter.api.AfterEach;

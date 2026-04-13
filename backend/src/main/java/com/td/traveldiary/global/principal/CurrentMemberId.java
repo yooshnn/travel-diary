@@ -1,4 +1,4 @@
-package com.td.traveldiary.global.annotation;
+package com.td.traveldiary.global.principal;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

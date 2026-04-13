@@ -4,7 +4,7 @@ import com.td.traveldiary.domain.member.entity.Member;
 import com.td.traveldiary.domain.member.exception.MemberNotFoundException;
 import com.td.traveldiary.domain.member.repository.MemberRepository;
 import com.td.traveldiary.domain.member.service.dto.response.MemberInfo;
-import com.td.traveldiary.global.storage.FileStorageService;
+import com.td.traveldiary.global.file.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

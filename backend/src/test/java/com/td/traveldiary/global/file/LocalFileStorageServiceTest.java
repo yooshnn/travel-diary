@@ -1,4 +1,4 @@
-package com.td.traveldiary.global.storage;
+package com.td.traveldiary.global.file;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

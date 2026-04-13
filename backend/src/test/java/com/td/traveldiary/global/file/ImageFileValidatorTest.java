@@ -1,6 +1,5 @@
-package com.td.traveldiary.global.validator;
+package com.td.traveldiary.global.file;
 
-import com.td.traveldiary.global.annotation.ValidImageFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
