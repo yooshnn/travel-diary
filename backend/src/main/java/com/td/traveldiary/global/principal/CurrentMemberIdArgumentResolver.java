@@ -1,6 +1,5 @@
-package com.td.traveldiary.global.resolver;
+package com.td.traveldiary.global.principal;
 
-import com.td.traveldiary.global.annotation.CurrentMemberId;
 import com.td.traveldiary.global.exception.BusinessException;
 import com.td.traveldiary.global.exception.ErrorCode;
 import org.springframework.core.MethodParameter;

@@ -1,4 +1,4 @@
-package com.td.traveldiary.global.storage;
+package com.td.traveldiary.global.file;
 
 import com.td.traveldiary.global.exception.BusinessException;
 import com.td.traveldiary.global.exception.ErrorCode;

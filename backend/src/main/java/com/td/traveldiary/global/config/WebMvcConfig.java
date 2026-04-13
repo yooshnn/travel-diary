@@ -1,6 +1,6 @@
 package com.td.traveldiary.global.config;
 
-import com.td.traveldiary.global.resolver.CurrentMemberIdArgumentResolver;
+import com.td.traveldiary.global.principal.CurrentMemberIdArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

@@ -4,8 +4,7 @@ import com.td.traveldiary.domain.member.controller.dto.request.MemberUpdateReque
 import com.td.traveldiary.domain.member.controller.dto.response.MemberInfoResponse;
 import com.td.traveldiary.domain.member.service.MemberService;
 import com.td.traveldiary.domain.member.service.dto.response.MemberInfo;
-import com.td.traveldiary.global.annotation.CurrentMemberId;
-import com.td.traveldiary.global.annotation.ValidImageFile;
+import com.td.traveldiary.global.principal.CurrentMemberId;
 import com.td.traveldiary.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
